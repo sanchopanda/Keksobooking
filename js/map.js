@@ -1,9 +1,10 @@
+//функция получения случайного числа из заданного диапазона
 function getRandomInt(min, max) {
   return Math.floor(min + Math.random() * (max - min));
 }
 
+//данные для генерации карточек
 var avatars = ["01", "02", "03", "04", "05", "06", "07", "08"];
-
 var titles = [
   "Большая уютная квартира",
   "Маленькая неуютная квартира",
@@ -14,22 +15,12 @@ var titles = [
   "Уютное бунгало далеко от моря",
   "Неуютное бунгало по колено в воде",
 ];
-
 var types = ["дворец", "квартира", "дом", "бунгало"];
-
 var checkins = ["12:00", "13:00", "14:00"];
-
 var checkouts = ["12:00", "13:00", "14:00"];
+var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
 
-var features = [
-  "wifi",
-  "dishwasher",
-  "parking",
-  "washer",
-  "elevator",
-  "conditioner",
-];
-
+//функция получения случайного элемента и удаления его из первоначального массива
 function getArrayElem(array) {
   i = getRandomInt(0, array.length);
   var elem = array[i];
@@ -37,10 +28,12 @@ function getArrayElem(array) {
   return elem;
 };
 
+//функция генерации карточек
 function getOffers(countOffers) {
   var offers = [];
   for (var i = 0; i < countOffers; i++) {
     offers[i] = {
+      id: i,
       author: {
         avatar: "img/avatars/user" + getArrayElem(avatars) + ".png",
       },
@@ -66,18 +59,17 @@ function getOffers(countOffers) {
   return offers;
 }
 
-var similarListElement = document.querySelector(".map__pins");
+var offers = getOffers(8);
 
+var similarListElement = document.querySelector(".map__pins");
 var similarPinTemplate = document
   .querySelector("template")
   .content.querySelector(".map__pin");
-
 var similarCardTemplate = document
   .querySelector("template")
   .content.querySelector(".map__card");
 
-var offers = getOffers(8);
-
+//функция рендера карточек
 function renderOffer(offer) {
   var offerElement = similarCardTemplate.cloneNode(true);
   offerElement.querySelector(".popup__avatar").src = offer.author.avatar;
@@ -106,7 +98,7 @@ function renderOffer(offer) {
   }
   return offerElement;
 }
-
+//функция рендера пинов
 function renderPins(offer) {
   var pinElement = similarPinTemplate.cloneNode(true);
   pinElement.querySelector("img").src = offer.author.avatar;
@@ -116,17 +108,47 @@ function renderPins(offer) {
     "px; left: " +
     offer.offer.location.x +
     "%";
+    pinElement.ariaLabel = offer.id;
   return pinElement;
 }
+//функция добавления пинов
+function addPins() {
+  var pins = document.createDocumentFragment();
+  for (var i = 0; i < offers.length; i++) {
+    pins.appendChild(renderPins(offers[i]));
+  }
+  similarListElement.appendChild(pins);
+};
+//функция добавления карточки
+function addOffer(offer) {  
+  var offerElem = document.createDocumentFragment();  
+  offerElem.appendChild(renderOffer(offer));  
+  similarListElement.after(offerElem);
+};
 
-var pins = document.createDocumentFragment();
-for (var i = 0; i < offers.length; i++) {
-  pins.appendChild(renderPins(offers[i]));
-}
-similarListElement.appendChild(pins);
+var mainMapPin = document.querySelector('.map__pin--main');
+var noticeForm = document.querySelector('.notice__form');
+var adressField = document.getElementById('address');
 
-var offerElem = document.createDocumentFragment();
-offerElem.appendChild(renderOffer(offers[1]));
-similarListElement.after(offerElem);
+//активация
+mainMapPin.addEventListener('mouseup', function(){
+  document.querySelector(".map").classList.remove("map--faded");
+  noticeForm.classList.remove("notice__form--disabled");  
+  addPins();
+  adressField.value = '50%, 408';
+});
 
-document.querySelector(".map").classList.remove("map--faded");
+//показ карточки по клику на соответствующий пин
+similarListElement.addEventListener('click', function(){
+  var pin = event.target.closest('button');
+  if (!pin) return;
+  if(!pin.ariaLabel) return;
+  var i = pin.ariaLabel;
+  var mapCard = document.querySelector('.map__card');
+  if(mapCard){
+    mapCard.remove();
+  } ;
+  addOffer(offers[i]);
+});
+
+
