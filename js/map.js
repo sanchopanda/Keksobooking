@@ -15,7 +15,12 @@ var titles = [
   "Уютное бунгало далеко от моря",
   "Неуютное бунгало по колено в воде",
 ];
-var types = ["дворец", "квартира", "дом", "бунгало"];
+var types = {
+  palace: "дворец",
+  flat: "квартира",
+  house: "дом",
+  bungalo: "бунгало"
+};
 var checkins = ["12:00", "13:00", "14:00"];
 var checkouts = ["12:00", "13:00", "14:00"];
 var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
@@ -34,6 +39,7 @@ function getRandomElem(array) {
   return array[getRandomInt(0, array.length)];
 };
 
+//функция перемешивания массива
 function randomShuffleArr(array) {
   var copyArr = array.slice(0);
   for (var i = copyArr.length - 1; i > 0; i--) {
@@ -44,6 +50,7 @@ function randomShuffleArr(array) {
   }
   return copyArr;
 };
+
 
 var similarListElement = document.querySelector(".map__pins");
 
@@ -59,7 +66,7 @@ function getOffers(countOffers) {
       offer: {
         title: getCutElem(titles),
         price: getRandomInt(1000, 10000),
-        type: getCutElem(types),
+        type: types[getRandomElem(Object.keys(types))],
         rooms: getRandomInt(1, 5),
         guests: getRandomInt(1, 10),
         checkin: getRandomElem(checkins),
@@ -85,6 +92,20 @@ var similarPinTemplate = document
 var similarCardTemplate = document
   .querySelector("template")
   .content.querySelector(".map__card");
+
+//функция рендера пинов
+function renderPins(offer) {
+  var pinElement = similarPinTemplate.cloneNode(true);
+  pinElement.querySelector("img").src = offer.author.avatar;
+  pinElement.style =
+    "top: " +
+    offer.offer.location.y +
+    "px; left: " +
+    offer.offer.location.x +
+    "px";
+  pinElement.ariaLabel = offer.id;
+  return pinElement;
+}
 
 //функция рендера карточек
 function renderOffer(offer) {
@@ -114,19 +135,7 @@ function renderOffer(offer) {
   offerPhotos.querySelector('.popup__photo').remove();
   return offerElement;
 }
-//функция рендера пинов
-function renderPins(offer) {
-  var pinElement = similarPinTemplate.cloneNode(true);
-  pinElement.querySelector("img").src = offer.author.avatar;
-  pinElement.style =
-    "top: " +
-    offer.offer.location.y +
-    "px; left: " +
-    offer.offer.location.x +
-    "px";
-  pinElement.ariaLabel = offer.id;
-  return pinElement;
-}
+
 //функция добавления пинов
 function addPins() {
   var pins = document.createDocumentFragment();
@@ -158,13 +167,59 @@ mainMapPin.addEventListener('mouseup', function () {
 similarListElement.addEventListener('click', function () {
   var pin = event.target.closest('button');
   if (!pin) return;
-  if (pin.ariaLabel === false) return;
   var i = pin.ariaLabel;
+  if (i === false || i === undefined) return;
   var mapCard = document.querySelector('.map__card');
   if (mapCard) {
     mapCard.remove();
   };
   addOffer(offers[i]);
 });
+//валидация цены и типа
+var priceForType = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+var inputType = noticeForm.querySelector("#type");
+var inputPrice = noticeForm.querySelector("#price");
+inputType.addEventListener("change", function () {
+  inputPrice.placeholder = priceForType[inputType.value];
+  inputPrice.min = priceForType[inputType.value];
+});
 
+//Валидация  времени заезда и выезда
+var inputTimein = noticeForm.querySelector("#timein");
+var inputTimeout = noticeForm.querySelector("#timeout");
+inputTimein.addEventListener("change", function () {
+  inputTimeout[inputTimein.selectedIndex].selected = true;
+});
+inputTimeout.addEventListener("change", function () {
+  inputTimein[inputTimeout.selectedIndex].selected = true;
+});
 
+//Валидация количества комнат и гостей
+var inputRoomNumber = noticeForm.querySelector("#room_number");
+var inputCapacity = noticeForm.querySelector("#capacity");
+inputRoomNumber.addEventListener("change", function () {
+  if (inputRoomNumber.value != 100) {
+    for (var i = 0; i < Object.keys(inputCapacity).length; i++) {
+      if (inputCapacity[i].value > inputRoomNumber.value || inputCapacity[i].value == 0) {
+        inputCapacity[i].disabled = true;
+        inputCapacity[i].selected = false;
+      } else {
+        inputCapacity[i].disabled = false;
+      }
+    }
+  } else {
+    for (var i = 0; i < Object.keys(inputCapacity).length; i++) {
+      if (inputCapacity[i].value == 0) {
+        inputCapacity[i].disabled = false;
+        inputCapacity[i].selected = true;
+      } else {
+        inputCapacity[i].disabled = true;
+      }
+    }
+  }
+});
