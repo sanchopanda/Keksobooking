@@ -75,8 +75,8 @@ function getOffers(countOffers) {
         description: "",
         photos: randomShuffleArr(photos),
         location: {
-          x: getRandomInt(0, similarListElement.clientWidth),
-          y: getRandomInt(0, similarListElement.clientHeight)
+          x: getRandomInt(30, similarListElement.clientWidth - 30),
+          y: getRandomInt(130, 630)
         }
       }
     };
@@ -155,13 +155,58 @@ var mainMapPin = document.querySelector('.map__pin--main');
 var noticeForm = document.querySelector('.notice__form');
 var adressField = document.getElementById('address');
 
-//активация
-mainMapPin.addEventListener('mouseup', function () {
-  document.querySelector(".map").classList.remove("map--faded");
-  noticeForm.classList.remove("notice__form--disabled");
-  addPins();
-  adressField.value = similarListElement.clientWidth / 2 + ', 408';
+//активация и ДнД
+var isMapActive = false;
+mainMapPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+  if (!isMapActive) {
+    document.querySelector(".map").classList.remove("map--faded");
+    noticeForm.classList.remove("notice__form--disabled");
+    addPins();
+    isMapActive = true;
+  };
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY,
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var moveCoords = {
+      x: mainMapPin.offsetLeft - shift.x,
+      y: mainMapPin.offsetTop - shift.y
+    };
+
+    if (moveCoords.x < similarListElement.offsetWidth - mainMapPin.offsetWidth / 2 && moveCoords.x > 0 + mainMapPin.offsetWidth / 2) {
+      mainMapPin.style.left = moveCoords.x + 'px';
+    };
+
+    if (moveCoords.y < 630 && moveCoords.y > 130) {
+      mainMapPin.style.top = moveCoords.y + 'px';
+    };
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    adressField.value = mainMapPin.offsetLeft + ', ' + (mainMapPin.offsetTop + 42);
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mousedown', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
+
 
 //показ карточки по клику на соответствующий пин
 similarListElement.addEventListener('click', function () {
@@ -223,3 +268,6 @@ inputRoomNumber.addEventListener("change", function () {
     }
   }
 });
+
+adressField.value = similarListElement.clientWidth / 2 + ',' + similarListElement.clientHeight / 2;
+
