@@ -144,12 +144,26 @@ function addPins() {
   }
   similarListElement.appendChild(pins);
 };
+
+//функция удаления  пинов
+
+function removePins() {
+  var pins = similarListElement.querySelectorAll('.map__pin');
+  for (var i = 1; i < pins.length; i++) {
+    pins[i].remove();
+  };
+}
 //функция добавления карточки
 function addOffer(offer) {
   var offerElem = document.createDocumentFragment();
   offerElem.appendChild(renderOffer(offer));
   similarListElement.after(offerElem);
 };
+
+//функция удаления карточки
+function removeOffer() {
+  if (document.querySelector('.map__card')) document.querySelector('.map__card').remove();
+}
 
 var mainMapPin = document.querySelector('.map__pin--main');
 var noticeForm = document.querySelector('.notice__form');
@@ -219,7 +233,11 @@ similarListElement.addEventListener('click', function () {
     mapCard.remove();
   };
   addOffer(offers[i]);
+  document.querySelector('.popup__close').addEventListener('click', removeOffer);
 });
+
+//удаление карточки по клику на close
+
 //валидация цены и типа
 var priceForType = {
   bungalo: 0,
@@ -269,5 +287,27 @@ inputRoomNumber.addEventListener("change", function () {
   }
 });
 
-adressField.value = similarListElement.clientWidth / 2 + ',' + similarListElement.clientHeight / 2;
 
+adressField.value = similarListElement.clientWidth / 2 + ',' + similarListElement.clientHeight / 2;
+//сброс
+var reset = noticeForm.querySelector('.form__reset');
+reset.addEventListener('click', deactivate);
+
+function deactivate() {
+  noticeForm.classList.add("notice__form--disabled");
+  document.querySelector(".map").classList.add("map--faded");
+  mainMapPin.style = '';
+  removePins();
+  removeOffer();
+  isMapActive = false;
+};
+
+noticeForm.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  document.querySelector('.success').classList.remove('hidden');
+  document.addEventListener('click', function () {
+    document.querySelector('.success').classList.add('hidden');
+  });
+  noticeForm.reset();
+  deactivate();
+});

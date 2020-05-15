@@ -25,7 +25,7 @@ fieldset {
   margin: 0;
 }
 
-button[type=submit] {
+button[type="submit"] {
   box-sizing: content-box;
   width: 206px;
   height: 60px;
@@ -39,19 +39,19 @@ button[type=submit] {
   border: 4px solid #ffaa99;
 }
 
-button[type=submit]:hover {
+button[type="submit"]:hover {
   border-color: #ff6d51;
 }
 
-button[type=submit]:active {
+button[type="submit"]:active {
   outline: none;
   border-color: #ff6d51;
   background-color: #ff6d51;
   color: white;
 }
 
-input[type=text],
-input[type=number],
+input[type="text"],
+input[type="number"],
 select,
 textarea {
   box-sizing: border-box;
@@ -69,15 +69,15 @@ textarea {
   background-color: white;
 }
 
-input[type=text]:hover,
-input[type=number]:hover,
+input[type="text"]:hover,
+input[type="number"]:hover,
 select:hover,
 textarea:hover {
   border-color: #ffaa99;
 }
 
-input[type=text]:focus,
-input[type=number]:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
 select:focus,
 textarea:focus {
   outline: none;
@@ -104,7 +104,7 @@ textarea:focus {
   overflow: hidden;
 }
 
-.features input[type=checkbox] {
+.features input[type="checkbox"] {
   position: absolute;
   left: -900em;
 }
@@ -127,7 +127,7 @@ textarea:focus {
   height: 28px;
   min-height: 28px;
 
-  background: url('../img/features-sprite.png') center no-repeat;
+  background: url("../img/features-sprite.png") center no-repeat;
   background-size: 100%;
   overflow: hidden;
 }
@@ -213,7 +213,7 @@ textarea:focus {
 }
 
 .map__pin::after {
-  content: '';
+  content: "";
 
   position: absolute;
   left: 50%;
@@ -405,7 +405,7 @@ textarea:focus {
 }
 
 .popup__close:after {
-  content: '×';
+  content: "×";
 
   display: block;
   color: #000;
@@ -572,7 +572,7 @@ textarea:focus {
   height: 230px;
 }
 
-.notice__form input[type=file] {
+.notice__form input[type="file"] {
   position: absolute;
   left: -900em;
 }
@@ -622,7 +622,6 @@ textarea:focus {
   cursor: pointer;
   font: 14px Roboto, sans-serif;
 }
-
 
 .footer {
   box-sizing: border-box;
@@ -699,4 +698,39 @@ textarea:focus {
 
 .footer-social-item-vk {
   background-position: -10px -10px;
+}
+
+.success {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding-top: 300px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.success__message {
+  position: relative;
+  color: #ffffff;
+  font-size: 50px;
+  font-weight: 700;
+}
+
+.success__message::before {
+  content: "";
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  width: 109px;
+  height: 122px;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
