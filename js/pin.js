@@ -1,15 +1,15 @@
 (function () {
     //функция рендера пинов
-    function renderPins(card, pinTemplate) {
+    function renderPins(card, pinTemplate, id) {
         var pinElement = pinTemplate.cloneNode(true);
         pinElement.querySelector("img").src = card.author.avatar;
         pinElement.style =
             "top: " +
-            card.offer.location.y +
+            card.location.y +
             "px; left: " +
-            card.offer.location.x +
+            card.location.x +
             "px";
-        pinElement.ariaLabel = card.id;
+        pinElement.ariaLabel = id;
         return pinElement;
     };
 
@@ -18,7 +18,7 @@
         addPins: function (cards, map) {
             var pins = document.createDocumentFragment();
             for (var i = 0; i < cards.length; i++) {
-                pins.appendChild(renderPins(cards[i], pinTemplate));
+                pins.appendChild(renderPins(cards[i], pinTemplate, i));
             }
             map.appendChild(pins);
         },

@@ -29,35 +29,8 @@
     };
 
     window.card = {
-        //функция генерации карточек
-        getCards: function (countCards, map) {
-            var cards = [];
-            for (var i = 0; i < countCards; i++) {
-                cards[i] = {
-                    id: i,
-                    author: {
-                        avatar: "img/avatars/user" + data.getCutElem(data.avatars) + ".png",
-                    },
-                    offer: {
-                        title: data.getCutElem(data.titles),
-                        price: data.getRandomInt(1000, 10000),
-                        type: data.types[data.getRandomElem(Object.keys(data.types))],
-                        rooms: data.getRandomInt(1, 5),
-                        guests: data.getRandomInt(1, 10),
-                        checkin: data.getRandomElem(data.checkins),
-                        checkout: data.getRandomElem(data.checkouts),
-                        features: data.features,
-                        description: "",
-                        photos: data.randomShuffleArr(data.photos),
-                        location: {
-                            x: data.getRandomInt(30, map.clientWidth - 30),
-                            y: data.getRandomInt(130, 630)
-                        }
-                    }
-                };
-                cards[i].offer.address = cards[i].offer.location.x + ', ' + cards[i].offer.location.y;
-            }
-            return cards;
+        getCards: function (data) {
+            window.card.cards = data;
         },
         //функция добавления карточки
         addCard: function (card, map) {

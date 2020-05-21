@@ -69,13 +69,19 @@
     reset.addEventListener('click', deactivate);
 
     //отправка формы
-    noticeForm.addEventListener('submit', function (evt) {
-        evt.preventDefault();
+    function formPostSucces() {
+        console.log(1);
         document.querySelector('.success').classList.remove('hidden');
         document.addEventListener('click', function () {
             document.querySelector('.success').classList.add('hidden');
         });
+
+    };
+
+    noticeForm.addEventListener('submit', function (evt) {
+        window.backend.save(new FormData(noticeForm), formPostSucces, backend.getError);
         noticeForm.reset();
         deactivate();
+        evt.preventDefault();
     });
 })()

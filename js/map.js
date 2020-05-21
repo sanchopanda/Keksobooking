@@ -9,8 +9,7 @@ var mainMapPin = document.querySelector('.map__pin--main');
 var noticeForm = document.querySelector('.notice__form');
 var adressField = document.getElementById('address');
 
-var cards = card.getCards(8, map);
-
+backend.load(card.getCards, backend.getError);
 
 //активация и ДнД
 adressField.value = map.clientWidth / 2 + ',' + map.clientHeight / 2;
@@ -20,7 +19,7 @@ mainMapPin.addEventListener('mousedown', function (evt) {
   if (!isMapActive) {
     document.querySelector(".map").classList.remove("map--faded");
     noticeForm.classList.remove("notice__form--disabled");
-    pin.addPins(cards, map);
+    pin.addPins(card.cards, map);
     isMapActive = true;
   };
   var startCoords = {
@@ -75,5 +74,12 @@ map.addEventListener('click', function () {
   if (mapCard) {
     mapCard.remove();
   };
-  card.addCard(cards[i], map);
+  card.addCard(card.cards[i], map);
+  mapCard = document.querySelector('.map__card');
+  //закрытие карточки по клику на крестик
+  var cardCloser = mapCard.querySelector('.popup__close');
+  cardCloser.addEventListener('click', function () {
+    mapCard.remove();
+  });
 });
+
