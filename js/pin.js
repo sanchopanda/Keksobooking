@@ -1,6 +1,6 @@
 (function () {
     //функция рендера пинов
-    function renderPins(card, pinTemplate, id) {
+    function renderPin(card, pinTemplate, id) {
         var pinElement = pinTemplate.cloneNode(true);
         pinElement.querySelector("img").src = card.author.avatar;
         pinElement.style =
@@ -10,15 +10,22 @@
             card.location.x +
             "px";
         pinElement.ariaLabel = id;
+        pinElement.addEventListener('click', function () {
+            var mapCard = document.querySelector('.map__card');
+            if (mapCard) {
+                mapCard.remove();
+            };
+            window.card.addCard(card);
+        });
         return pinElement;
     };
 
     window.pin = {
-        //функция добавления пинов
+        //функция добавления пинов       
         addPins: function (cards) {
             var pins = document.createDocumentFragment();
             for (var i = 0; i < cards.length; i++) {
-                pins.appendChild(renderPins(cards[i], pinTemplate, i));
+                pins.appendChild(renderPin(cards[i], pinTemplate, i));
             }
             window.map.appendChild(pins);
         },

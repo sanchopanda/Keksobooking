@@ -63,23 +63,3 @@ mainMapPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 });
-
-//показ карточки по клику на соответствующий пин
-map.addEventListener('click', function () {
-  var pin = event.target.closest('button');
-  if (!pin) return;
-  var i = pin.ariaLabel;
-  if (i === false || i === undefined) return;
-  var mapCard = document.querySelector('.map__card');
-  if (mapCard) {
-    mapCard.remove();
-  };
-  card.addCard(card.cards[i]);
-  mapCard = document.querySelector('.map__card');
-  //закрытие карточки по клику на крестик
-  var cardCloser = mapCard.querySelector('.popup__close');
-  cardCloser.addEventListener('click', function () {
-    mapCard.remove();
-  });
-});
-
