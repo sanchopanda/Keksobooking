@@ -1,4 +1,4 @@
-var map = document.querySelector(".map__pins");
+window.map = document.querySelector(".map__pins");
 var pinTemplate = document
   .querySelector("template")
   .content.querySelector(".map__pin");
@@ -19,7 +19,7 @@ mainMapPin.addEventListener('mousedown', function (evt) {
   if (!isMapActive) {
     document.querySelector(".map").classList.remove("map--faded");
     noticeForm.classList.remove("notice__form--disabled");
-    pin.addPins(card.cards, map);
+    pin.addPins(card.cards);
     isMapActive = true;
   };
   var startCoords = {
@@ -74,7 +74,7 @@ map.addEventListener('click', function () {
   if (mapCard) {
     mapCard.remove();
   };
-  card.addCard(card.cards[i], map);
+  card.addCard(card.cards[i]);
   mapCard = document.querySelector('.map__card');
   //закрытие карточки по клику на крестик
   var cardCloser = mapCard.querySelector('.popup__close');

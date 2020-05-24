@@ -1,4 +1,10 @@
 (function () {
+    var typeForValue = {
+        flat: "квартира",
+        palace: "дворец",
+        bungalo: "бунгало",
+        house: "дом"
+    };
     //функция рендера карточек
     function renderCard(card, cardTemplate) {
         var cardElement = cardTemplate.cloneNode(true);
@@ -6,7 +12,7 @@
         cardElement.querySelector("h3").textContent = card.offer.title;
         cardElement.querySelector(".popup__adress").textContent = card.offer.address;
         cardElement.querySelector(".popup__text--price").textContent = card.offer.price + "Р/ночь";
-        cardElement.querySelector(".popup__type").textContent = card.offer.type;
+        cardElement.querySelector(".popup__type").textContent = typeForValue[card.offer.type];
         cardElement.querySelector(".popup__text--capacity").textContent = card.offer.rooms + " комнаты для " + card.offer.guests + " гостей";
         cardElement.querySelector(".popup__text--time").textContent = "Заезд после " + card.offer.checkin + ", выезд до " + card.offer.checkout;
         var featuresList = cardElement.querySelector(".popup__features");
@@ -33,10 +39,10 @@
             window.card.cards = data;
         },
         //функция добавления карточки
-        addCard: function (card, map) {
+        addCard: function (card) {
             var cardElem = document.createDocumentFragment();
             cardElem.appendChild(renderCard(card, cardTemplate));
-            map.after(cardElem);
+            window.map.after(cardElem);
         },
         //функция удаления карточки
         removeCard: function () {

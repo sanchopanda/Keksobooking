@@ -15,19 +15,23 @@
 
     window.pin = {
         //функция добавления пинов
-        addPins: function (cards, map) {
+        addPins: function (cards) {
             var pins = document.createDocumentFragment();
             for (var i = 0; i < cards.length; i++) {
                 pins.appendChild(renderPins(cards[i], pinTemplate, i));
             }
-            map.appendChild(pins);
+            window.map.appendChild(pins);
         },
         //функция удаления  пинов
-        removePins: function (map) {
-            var pins = map.querySelectorAll('.map__pin');
+        removePins: function () {
+            var pins = window.map.querySelectorAll('.map__pin');
             for (var i = 1; i < pins.length; i++) {
                 pins[i].remove();
             };
+        },
+        updatePins: function (cards) {
+            pin.removePins();
+            pin.addPins(cards);
         }
     };
 })();
