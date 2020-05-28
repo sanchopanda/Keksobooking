@@ -2,6 +2,8 @@
     var map = document.querySelector(".map__pins");
     var noticeForm = document.querySelector('.notice__form');
 
+
+
     //валидация цены и типа
     var priceForType = {
         bungalo: 0,
@@ -60,6 +62,8 @@
     function deactivate() {
         noticeForm.classList.add("notice__form--disabled");
         document.querySelector(".map").classList.add("map--faded");
+        document.querySelector(".map__filters").reset();
+
         mainMapPin.style = '';
         pin.removePins(map);
         card.removeCard();
@@ -70,17 +74,18 @@
 
     //отправка формы
     function formPostSucces() {
-        console.log(1);
         document.querySelector('.success').classList.remove('hidden');
         document.addEventListener('click', function () {
+            noticeForm.reset();
             document.querySelector('.success').classList.add('hidden');
         });
 
     };
 
     noticeForm.addEventListener('submit', function (evt) {
-        window.backend.save(new FormData(noticeForm), formPostSucces, backend.getError);
-        noticeForm.reset();
+        var data = new FormData(noticeForm);
+        data.append('avatar', window.avatars)
+        window.backend.save(data, formPostSucces, backend.getError);
         deactivate();
         evt.preventDefault();
     });
