@@ -605,6 +605,17 @@ textarea:focus {
 
 .form__photo-container {
   width: 140px;
+  display: flex;
+}
+
+.form__photo {
+  height: 70px;
+  padding: 0 5px;
+  margin-bottom: 5px;
+}
+
+.form__photo img {
+  height: 100%;
 }
 
 .form__element--submit {

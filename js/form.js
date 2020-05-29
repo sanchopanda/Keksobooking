@@ -84,7 +84,8 @@
 
     noticeForm.addEventListener('submit', function (evt) {
         var data = new FormData(noticeForm);
-        data.append('avatar', window.avatars)
+        data.append('avatar', window.avatars);
+        data.append('photos', window.photos);
         window.backend.save(data, formPostSucces, backend.getError);
         deactivate();
         evt.preventDefault();
